@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,14 +29,16 @@ public class InventoryService {
     public InventoryService() {
         //Initialize discount chain
 
+        //Adding node for settings discounts on regular books (older than 1 year but newer than 5
         this.discountChainNode = new TemporalDiscountChainNode(
-                i-> i.isAfter(Instant.now().minus(Duration.ofDays(365 * 5))),
-                i-> i.isBefore(Instant.now().minus(Duration.ofDays(365))),
-                        0.0F);
+                i -> i.isAfter(Instant.now().minus(Duration.ofDays(365 * 5))),
+                i -> i.isBefore(Instant.now().minus(Duration.ofDays(365))),
+                0.0F);
 
+        //Adding node for settings discounts on old books (older than 5 years
         this.discountChainNode.setNext(new TemporalDiscountChainNode(
-                i-> true,
-                i-> i.isBefore(Instant.now().minus(Duration.ofDays(365 * 5))),
+                i -> true,
+                i -> i.isBefore(Instant.now().minus(Duration.ofDays(365 * 5))),
                 0.2F)
         );
 
