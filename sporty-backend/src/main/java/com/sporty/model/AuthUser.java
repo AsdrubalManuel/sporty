@@ -1,9 +1,6 @@
 package com.sporty.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -14,4 +11,6 @@ public class AuthUser {
     private Long id;
     private String email;
     private String password;
+    @Column(columnDefinition = "integer default 0")
+    private Integer loyaltyPoints;
 }
