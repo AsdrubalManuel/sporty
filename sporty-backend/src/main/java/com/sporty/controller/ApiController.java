@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiController {
 
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/user")
     public String protectedEndpoint(JwtAuthenticationToken token) {
-        return "Hello " + token.getName();
+        return "Hello " + token.getTokenAttributes();
     }
 }

@@ -1,7 +1,7 @@
 package com.sporty.controller;
 
 import com.sporty.controller.dto.LoginRequest;
-import com.sporty.security.TokenService;
+import com.sporty.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

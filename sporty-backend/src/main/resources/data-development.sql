@@ -1,0 +1,1 @@
+INSERT INTO auth_user(email,password) VALUES('test@sporty.com','$2a$10$oEAGeLvr3bxc2nnAYUfXMeNmIxZnXnFmKKMwQIlRyynC6A5mHPpsi');

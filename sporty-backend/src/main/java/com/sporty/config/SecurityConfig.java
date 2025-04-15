@@ -36,7 +36,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/h2-console").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(config -> config.jwt(jwt -> jwt.decoder(jwtDecoder())));
 
