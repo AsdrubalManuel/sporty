@@ -22,6 +22,6 @@ public class UserController {
     public Map protectedEndpoint(JwtAuthenticationToken token) {
         Optional<AuthUser> user = authUserRepository.findByEmail((String) token.getTokenAttributes().get("email"));
 
-        return Map.of("email",user.get().getEmail(), "loyaltyPoints", user.get().getLoyaltyPoints());
+        return Map.of("email",user.get().getEmail(), "loyaltyPoints", user.get().getLoyaltyPoints(), "admin", user.get().isAdmin());
     }
 }

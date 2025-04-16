@@ -13,4 +13,6 @@ public class AuthUser {
     private String password;
     @Column(columnDefinition = "integer default 0")
     private Integer loyaltyPoints;
+    @Column(columnDefinition = "boolean default false")
+    private boolean admin;
 }
