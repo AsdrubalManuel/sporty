@@ -1,6 +1,7 @@
 package com.sporty.service;
 
 import com.sporty.controller.dto.BookPageResponse;
+import com.sporty.controller.dto.BookRequest;
 import com.sporty.controller.dto.BookResponse;
 import com.sporty.controller.dto.PageResponse;
 import com.sporty.exception.NotFoundException;
@@ -65,4 +66,28 @@ public class InventoryService {
 
         return new BookResponse(book.get().getId(), book.get().getTitle(), book.get().getAuthor(), book.get().getDiscount());
     }
+
+    public void deleteBook(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    public void updateBook(Long id, BookRequest bookRequest) {
+        Optional<Book> book = bookRepository.findById(id);
+        if(book.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        book.get().setTitle(bookRequest.getTitle());
+        book.get().setAuthor(bookRequest.getAuthor());
+        bookRepository.save(book.get());
+    }
+
+    public Long addBook(BookRequest bookRequest) {
+        Book book = new Book();
+        book.setTitle(bookRequest.getTitle());
+        book.setAuthor(bookRequest.getAuthor());
+        bookRepository.save(book);
+        return book.getId();
+    }
+
 }
