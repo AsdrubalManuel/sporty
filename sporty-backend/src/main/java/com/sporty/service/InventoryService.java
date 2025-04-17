@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class InventoryService {
@@ -46,15 +48,32 @@ public class InventoryService {
         );
     }
 
+    public boolean applyLoyaltyPointsDiscount(List<Book> books){
+        boolean applied = false;
+        for(Book book : books) {
+            applied = discountChainNode.applyLoyaltyPointsDiscount(book);
+            if(applied) break;
+        }
+        return applied;
+    }
+
     public BookPageResponse getBooks(int page) {
         Page<Book> bookPage = bookRepository.findAll(PageRequest.of(page, PAGE_SIZE));
 
-        Set<BookResponse> books = bookPage.get()
-                .peek(discountChainNode::setBaseDiscount)
-                .map(book -> new BookResponse(book.getId(), book.getTitle(), book.getAuthor(), book.getDiscount()))
-                .collect(Collectors.toSet());
+        applyDiscounts(bookPage.getContent());
 
+        List<BookResponse> books = toBookResponse(bookPage.stream());
         return new BookPageResponse(books, new PageResponse(page, bookPage.getTotalPages()));
+    }
+
+    public void applyDiscounts(List<Book> bookStream) {
+        bookStream.forEach(discountChainNode::setBaseDiscount);
+    }
+
+    public List<BookResponse> toBookResponse(Stream<Book> bookStream) {
+        return bookStream
+                .map(book -> new BookResponse(book.getId(), book.getTitle(), book.getAuthor(), book.getDiscount(),book.getPrice()))
+                .collect(Collectors.toList());
     }
 
     public BookResponse getBook(Long id) {
@@ -64,7 +83,7 @@ public class InventoryService {
         }
         discountChainNode.setBaseDiscount(book.get());
 
-        return new BookResponse(book.get().getId(), book.get().getTitle(), book.get().getAuthor(), book.get().getDiscount());
+        return new BookResponse(book.get().getId(), book.get().getTitle(), book.get().getAuthor(), book.get().getDiscount(),book.get().getPrice());
     }
 
     public void deleteBook(Long id) {
@@ -89,5 +108,7 @@ public class InventoryService {
         bookRepository.save(book);
         return book.getId();
     }
+
+
 
 }

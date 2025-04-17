@@ -11,5 +11,7 @@ public abstract class DiscountChainNode {
     }
 
     public abstract void setBaseDiscount(Book book);
+    public abstract boolean applyLoyaltyPointsDiscount(Book book);
+
 
 }

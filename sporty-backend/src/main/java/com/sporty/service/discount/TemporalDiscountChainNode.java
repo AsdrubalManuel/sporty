@@ -19,8 +19,7 @@ public class TemporalDiscountChainNode extends DiscountChainNode {
     @Override
     public void setBaseDiscount(Book book) {
 
-        Instant now = Instant.now();
-        if (from.test(book.getCreatedAt()) && from.test(book.getCreatedAt())) {
+        if (from.test(book.getCreatedAt()) && to.test(book.getCreatedAt())) {
             book.setDiscount(discount);
             return;
         }
@@ -28,5 +27,19 @@ public class TemporalDiscountChainNode extends DiscountChainNode {
         if (next != null) {
             next.setBaseDiscount(book);
         }
+    }
+
+    @Override
+    public boolean applyLoyaltyPointsDiscount(Book book) {
+        if (from.test(book.getCreatedAt()) && to.test(book.getCreatedAt())) {
+            book.setDiscount(1.0F);
+            return true;
+        }
+
+        if (next != null) {
+            return next.applyLoyaltyPointsDiscount(book);
+        }
+
+        return false;
     }
 }
